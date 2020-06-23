@@ -1,0 +1,22 @@
+<div *ngIf="!gameService.isJoinedGame" [style.background-color]="color" class="wrapper container-fluid">
+  <app-join-game (gameId)="subscribeToGame($event)"></app-join-game>
+</div>
+
+<div *ngIf="gameService.isJoinedGame" [style.background-color]="color" class="wrapper container-fluid">
+
+<!--  Lobby goes here-->
+<!--  {{game$ | async | json}}-->
+  <div *ngIf="!(this.gameService.game$ | async)?.started">
+    <h1>Lobby code is {{(this.gameService.game$ | async)?.code}}</h1>
+    <app-game-lobby [players]="(this.gameService.game$ | async)?.players"></app-game-lobby>
+  </div>
+
+
+
+<!--  Actual Game goes here-->
+  <div *ngIf="(this.gameService.game$ | async)?.started" (click)="newPrompt()" class="row justify-content-center" style="height: 100%; text-align: center">
+    <div class="col-8 align-self-center">
+      <app-prompt [prompt_text]="(this.gameService.game$ | async)?.prompts[(this.gameService.game$ | async)?.round]"></app-prompt>
+    </div>
+  </div>
+</div>

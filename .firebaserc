@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "big-toe-game": {
+      "hosting": {
+        "big-toe": [
+          "big-toe-game"
+        ]
+      }
+    }
+  }
+}

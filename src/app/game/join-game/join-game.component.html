@@ -1,0 +1,9 @@
+<form (ngSubmit)="joinGame()">
+  <label>Enter Game Code
+    <input [(ngModel)]="game_code" name="game_code" type="text">
+  </label>
+  <button type="submit"> JOIN</button>
+</form>
+
+
+{{joined_game  | json}}

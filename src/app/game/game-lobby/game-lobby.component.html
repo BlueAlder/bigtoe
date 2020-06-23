@@ -1,0 +1,16 @@
+<div>
+  <form (ngSubmit)="addPlayerToGame()">
+    <label>New player
+      <input type="text" name="name" [(ngModel)]="newPlayer">
+    </label>
+  </form>
+  <h2>The fellas that are playin</h2>
+<!--  {{game$ | async | json}}-->
+  <li *ngFor="let player of players">
+    {{player}}
+  </li>
+
+  <div>
+    <button (click)="startGame()">Start game</button>
+  </div>
+</div>

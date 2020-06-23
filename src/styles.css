@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+.wrapper {
+  background-color: blue;
+  height: 100vh;
+}
+
+div {
+  /*outline: 1px solid yellow;*/
+}
+
+@font-face {
+  font-family: 'chunkfiveregular';
+  src: url('/assets/font/chunkfive-regular-webfont.woff2') format('woff2'),
+  url('/assets/font/chunkfive-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}

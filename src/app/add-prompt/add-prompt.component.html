@@ -1,0 +1,27 @@
+<div class="wrapper container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-8 text-center">
+      <span class="add-prompt">Please add in your custom prompts below :)</span>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-sm-12">
+      <textarea [(ngModel)]="promptString" class="input-prompt" name="prompt"
+                placeholder="$NAME has to eat 6 cookies or drunk 2"></textarea>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+
+    <div class="col-md-4 col-sm-10">
+      <div style="color: white; text-align: center">
+        <span >Total Prompts so far: {{(stats$ | async)?.count}}</span>
+
+      </div>
+      <div class="play-button">
+        <a (click)="addPromptToCollection()">Add Prompt</a>
+      </div>
+    </div>
+  </div>
+</div>
