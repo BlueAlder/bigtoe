@@ -1,16 +1,53 @@
 <div>
-  <form (ngSubmit)="addPlayerToGame()">
-    <label>New player
-      <input type="text" name="name" [(ngModel)]="newPlayer">
-    </label>
-  </form>
-  <h2>The fellas that are playin</h2>
-<!--  {{game$ | async | json}}-->
-  <li *ngFor="let player of players">
-    {{player}}
-  </li>
+  <!--  Header row with lobby code-->
+  <div class="row justify-content-center">
+    <h1>GAME CODE: {{(this.gameService.game$ |async)?.code}}</h1>
+  </div>
 
-  <div>
-    <button (click)="startGame()">Start game</button>
+  <!--  Add player input-->
+  <div class="row justify-content-center">
+    <div class="col-sm-8 col-md-4">
+
+
+      <div class="row justify-content-center">
+        <div>
+          Add a gamer
+        </div>
+      </div>
+
+
+      <div class="row justify-content-center">
+        <form class="col-12" (ngSubmit)="addPlayerToGame()">
+          <div class="input-group mb-3">
+            <input type="text" [(ngModel)]="newPlayer" name="newPlayer" class="form-control" maxlength="15"
+                   placeholder="Epic Joe" aria-label="Epic Joe" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-dark" type="submit">+</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!--   <div class="col"></div>-->
+    <h2>Who's playin' </h2>
+  </div>
+    <!--  {{game$ | async | json}}-->
+  <div class="row justify-content-center player-board">
+    <ul class="col-8">
+      <li *ngFor="let player of players">
+        {{player}}
+      </li>
+    </ul>
+
+  </div>
+
+
+  <div class="row justify-content-center">
+    <div class="play-button col-lg-4 col-sm-8">
+      <a (click)="startGame()">Start game</a>
+    </div>
   </div>
 </div>

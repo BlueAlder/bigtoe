@@ -1,42 +1,69 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/firestore";
-import {Game} from "../game/game.model";
-import {Observable} from "rxjs";
-import * as firebase from "firebase";
-import {take} from "rxjs/operators";
-import {PromptsService} from "./prompts.service";
-import {environment} from "../../environments/environment";
-import FieldValue = firebase.firestore.FieldValue;
+import {AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {Game, Status} from '../game/game.model';
+import {Observable} from 'rxjs';
+import * as firebase from 'firebase';
+import {PromptsService} from './prompts.service';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-  gameCollection: AngularFirestoreCollection<Game>
-  currentGameCollection: AngularFirestoreCollection<Game>
+  constructor(private afs: AngularFirestore,
+              private promptsService: PromptsService) {
+  }
+
+  gameCollection: AngularFirestoreCollection<Game>;
+  currentGameCollection: AngularFirestoreCollection<Game>;
 
   gameDocument: AngularFirestoreDocument<Game>;
-  public game$: Observable<Game>
+  public game$: Observable<Game>;
 
   public isJoinedGame = false;
 
-  constructor(private afs: AngularFirestore,
-              private promptsService: PromptsService) {
+  private static selectRandomElementFromArray(array: any[] | string) {
+    return array[Math.floor(Math.random() * array.length)];
+  }
+
+  private static generateRandomCode(): string {
+    const codeLength = 4;
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let code = '';
+
+    for (let i = 0; i < codeLength; i ++) {
+      code += GameService.selectRandomElementFromArray(alphabet);
+    }
+    return code;
+  }
+
+  private static replacePlaceholderPrompt(prompt: string, players: string[]) {
+    if (prompt.includes('$NAME')) {
+      while (prompt.includes('$NAME')) {
+        const selectedPlayer = this.selectRandomElementFromArray(players);
+        prompt = prompt.replace('$NAME', selectedPlayer);
+        players.splice(players.indexOf(selectedPlayer), 1);
+      }
+    } else {
+      prompt = this.selectRandomElementFromArray(players) + ', ' + prompt;
+    }
+
+    return prompt;
   }
 
 
 
   subscribeToGame(gameId: string) {
     this.gameDocument = this.afs.doc(`games/${gameId}`);
-    this.game$ = this.gameDocument.valueChanges()
+    this.game$ = this.gameDocument.valueChanges();
     this.isJoinedGame = true;
     // return this.game$;
   }
 
 
   addNewPlayer(playerName: string) {
-    let arrUnion = this.gameDocument.update({
+    const arrUnion = this.gameDocument.update({
       players: firebase.firestore.FieldValue.arrayUnion(playerName)
     });
   }
@@ -44,7 +71,7 @@ export class GameService {
   async startGame(players: string[]) {
     // Pull 20 prompts regex replace the names
     let prompts = await this.promptsService.getRandomPrompts(environment.game_settings.num_rounds);
-    console.log(prompts)
+    console.log(prompts);
 
     prompts = prompts.map(prompt => GameService.replacePlaceholderPrompt(prompt, Array.from(players)));
     console.log(prompts);
@@ -55,65 +82,48 @@ export class GameService {
     // rand_prompt.forEach(doc => console.log(doc.data()));
 
 
-    this.gameDocument.update({started: true, prompts: prompts})
+    this.gameDocument.update({status: Status.STARTED, prompts});
   }
 
-
+  currentGameState() {
+    return this.gameDocument.ref.get()
+      .then(data => data.data());
+  }
 
   createGame() {
-    const defaultGame : Game = {
+    const defaultGame: Game = {
       code: GameService.generateRandomCode(),
       players: [],
-      active_prompt: "Now this... is epic",
+      active_prompt: 'Now this... is epic',
       prompts: [],
-      round: 0 ,
-      started: false,
-      total_rounds: environment.game_settings.num_rounds, //environment.game_settings.num_rounds,
+      round: 1 ,
+      status: Status.OPEN,
+      total_rounds: environment.game_settings.num_rounds, // environment.game_settings.num_rounds,
       type: 'picante'
-    }
+    };
 
-    this.gameCollection = this.afs.collection('games')
+    this.gameCollection = this.afs.collection('games');
     this.gameCollection.add(defaultGame)
       .then(doc => {
-        console.log("created game with id" + doc.id)
+        console.log('created game with id' + doc.id);
         this.subscribeToGame(doc.id);
-        console.log("subscribed")
+        console.log('subscribed');
       });
   }
 
-  nextRound() {
-    // TODO stop on final round
-
-    const increment = <any>firebase.firestore.FieldValue.increment(1);
-    this.gameDocument.update({round: increment})
+  disconnect() {
+    this.isJoinedGame = false;
   }
 
-  private static selectRandomElementFromArray(array: any[] | string) {
-    return array[Math.floor(Math.random() * array.length)]
-  }
+  async nextRound() {
+    const gameState = await this.currentGameState();
 
-  private static generateRandomCode() : string {
-    const codeLength = 4;
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    let code = '';
-
-    for (let i = 0; i < codeLength; i ++) {
-      code += GameService.selectRandomElementFromArray(alphabet)
-    }
-    return code;
-  }
-
-  private static replacePlaceholderPrompt(prompt: string, players: string[]) {
-    if (prompt.includes("$NAME")) {
-      while (prompt.includes("$NAME")) {
-        const selectedPlayer = this.selectRandomElementFromArray(players)
-        prompt = prompt.replace("$NAME", selectedPlayer)
-        players.splice(players.indexOf(selectedPlayer), 1)
-      }
+    // end game
+    if (gameState.round >= gameState.total_rounds) {
+      this.gameDocument.update({status: Status.ENDED});
     } else {
-      prompt = this.selectRandomElementFromArray(players) + ", " + prompt;
+      const increment = firebase.firestore.FieldValue.increment(1) as any;
+      this.gameDocument.update({round: increment});
     }
-
-    return prompt;
   }
 }

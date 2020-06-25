@@ -1,9 +1,17 @@
-<form (ngSubmit)="joinGame()">
-  <label>Enter Game Code
-    <input [(ngModel)]="game_code" name="game_code" type="text">
-  </label>
-  <button type="submit"> JOIN</button>
-</form>
+<div class="row justify-content-center">
+  <h1 class="page-title">JOIN A GAME</h1>
+</div>
+<div class="row justify-content-center">
+  <form (ngSubmit)="joinGame()">
+    <div class="input-group mb-3">
+      <input type="text" [(ngModel)]="game_code" (ngModelChange)="game_code = game_code.toUpperCase()" name="game_code" class="form-control text-center" maxlength="4" autocomplete="off"
+             placeholder="GAME CODE" aria-label="Epic Joe" aria-describedby="basic-addon2">
+    </div>
 
-
-{{joined_game  | json}}
+  </form>
+</div>
+<div class="row justify-content-center">
+  <div class="play-button col-lg-3 col-sm-8">
+    <a (click)="joinGame()">Join Game</a>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {GameService} from "../services/game.service";
-import {Router} from "@angular/router";
+import {GameService} from '../services/game.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +13,12 @@ export class HomeComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    this.gameService.disconnect();
   }
 
   createGame() {
-    this.gameService.createGame()
+    this.gameService.createGame();
     this.gameService.isJoinedGame = true;
-    this.router.navigate(['/game'])
+    this.router.navigate(['/game']);
   }
 }
