@@ -1,0 +1,9 @@
+.back-button {
+  filter: brightness(50%) blur(5px);
+  height: 107vh;
+  width: 10vw;
+  margin-left: -20px;
+  margin-top: -20px;
+
+  /*background-color: red;*/
+}

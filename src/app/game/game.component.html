@@ -13,11 +13,18 @@
 
 
 <!--  Actual Game goes here-->
-  <div *ngIf="(this.gameService.game$ | async)?.status === statusEnum.STARTED" (click)="newPrompt()" class="row justify-content-center" style="height: 100%; text-align: center">
-    <div class="col-8 align-self-center">
-      <app-prompt [prompt_text]="(this.gameService.game$ | async)?.prompts[(this.gameService.game$ | async)?.round - 1]"></app-prompt>
+  <div *ngIf="(this.gameService.game$ | async)?.status === statusEnum.STARTED" class="">
+    <div  (click)="newPrompt()" class="row justify-content-center position-absolute" style="height: 100%; text-align: center; width: 100%">
+      <div class="col-8 align-self-center">
+        <app-prompt [prompt_text]="(this.gameService.game$ | async)?.prompts[(this.gameService.game$ | async)?.round - 1]"></app-prompt>
+      </div>
+
+    </div>
+    <div class="position-absolute back-button" (click)="goBack()" [style.background-color]="color" >
+<!--      <button>ghui</button>-->
     </div>
   </div>
+
 
   <div *ngIf="(this.gameService.game$ | async)?.status === statusEnum.ENDED" (click)="newPrompt()" class="row justify-content-center" style="height: 100%; text-align: center">
     <div class="col-8 align-self-center">

@@ -14,7 +14,7 @@ export class GameLobbyComponent implements OnInit {
   @Input()
   players: string[];
 
-  newPlayer = 'joe';
+  newPlayer = '';
   minPlayers = 2;
 
 

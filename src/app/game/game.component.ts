@@ -52,8 +52,14 @@ export class GameComponent implements OnInit {
   newPrompt() {
     this.gameService.nextRound();
     this.color = this.getRandomColor();
-    this.prompt = this.getRandomPrompt();
   }
+
+  goBack() {
+    this.gameService.previousRound();
+    this.color = this.getRandomColor();
+
+  }
+
 
   subscribeToGame(gameId: string) {
     this.gameService.subscribeToGame(gameId);

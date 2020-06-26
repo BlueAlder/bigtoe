@@ -22,6 +22,7 @@ export class GameService {
   public game$: Observable<Game>;
 
   public isJoinedGame = false;
+  public gameStatus: Status;
 
   private static selectRandomElementFromArray(array: any[] | string) {
     return array[Math.floor(Math.random() * array.length)];
@@ -32,7 +33,7 @@ export class GameService {
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let code = '';
 
-    for (let i = 0; i < codeLength; i ++) {
+    for (let i = 0; i < codeLength; i++) {
       code += GameService.selectRandomElementFromArray(alphabet);
     }
     return code;
@@ -53,11 +54,11 @@ export class GameService {
   }
 
 
-
   subscribeToGame(gameId: string) {
     this.gameDocument = this.afs.doc(`games/${gameId}`);
     this.game$ = this.gameDocument.valueChanges();
     this.isJoinedGame = true;
+    this.game$.subscribe(data => this.gameStatus = data.status);
     // return this.game$;
   }
 
@@ -96,7 +97,7 @@ export class GameService {
       players: [],
       active_prompt: 'Now this... is epic',
       prompts: [],
-      round: 1 ,
+      round: 1,
       status: Status.OPEN,
       total_rounds: environment.game_settings.num_rounds, // environment.game_settings.num_rounds,
       type: 'picante'
@@ -113,9 +114,16 @@ export class GameService {
 
   disconnect() {
     this.isJoinedGame = false;
+    this.gameStatus = undefined;
   }
 
   async nextRound() {
+    // If game hasn't already ended
+    if (this.gameStatus === Status.ENDED) {
+      return;
+    }
+
+    // Check rounds if game has ended
     const gameState = await this.currentGameState();
 
     // end game
@@ -123,6 +131,15 @@ export class GameService {
       this.gameDocument.update({status: Status.ENDED});
     } else {
       const increment = firebase.firestore.FieldValue.increment(1) as any;
+      this.gameDocument.update({round: increment});
+    }
+  }
+
+  async previousRound() {
+    const gameState = await this.currentGameState();
+
+    if (gameState.round > 1) {
+      const increment = firebase.firestore.FieldValue.increment(-1) as any;
       this.gameDocument.update({round: increment});
     }
   }

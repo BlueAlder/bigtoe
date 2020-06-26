@@ -25,7 +25,7 @@ export class PromptsService {
 
 
 
-    const stats = await this.getStatsSnapshot()
+    const stats = await this.getRealStatsSnapshot()
 
     const newPrompt: Prompt = {
       prompt: promptString
@@ -39,6 +39,7 @@ export class PromptsService {
     const batch = this.afs.firestore.batch();
 
     batch.set(promptRef, newPrompt)
+    console.log(stats.count);
     batch.set(statsRef, {count: increment}, {merge: true});
     batch.commit();
   }
@@ -50,8 +51,13 @@ export class PromptsService {
 
   getStatsSnapshot() {
     // CHANGE ME WHEN ITS REAL
-    const statsDocument = this.afs.doc('prompts-test/--stats--');
+    const statsDocument = this.afs.doc('prompts/--stats--');
     return statsDocument.ref.get().then(data => data.data())
+  }
+
+  getRealStatsSnapshot() {
+    const statsDocument = this.afs.doc('prompts/--stats--');
+    return statsDocument.ref.get().then(data => data.data());
   }
 
 
@@ -70,7 +76,7 @@ export class PromptsService {
 
     const promptPromises = await promptIds.map(id => {
       // CHANGE ME WHEN ITS REAL
-      return this.afs.doc(`prompts-test/${id}`).ref.get()
+      return this.afs.doc(`prompts/${id}`).ref.get()
         .then(data => {
           // console.log(data.data())
           return data.data().prompt;
