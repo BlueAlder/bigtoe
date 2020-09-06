@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import {GameService} from '../services/game.service';
+import {faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-game',
@@ -16,6 +17,9 @@ export class GameComponent implements OnInit {
   statusEnum = Status;
 
   game$: Observable<Game>;
+
+  // Icons
+
 
 
   background_colors = [

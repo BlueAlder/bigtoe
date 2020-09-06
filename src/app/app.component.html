@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<!--<button (click)="openFullscreen()">full</button>-->
+<div class="wrapper" *ngIf="!isLandscape">
+  <div class="row justify-content-center">
+    <div class="play-button col-11">
+      <a class="play-button" (click)="openFullscreen()">Click here to go back to fullscreen </a>
+    </div>
+  </div>
+</div>
+<router-outlet *ngIf="isLandscape"></router-outlet>

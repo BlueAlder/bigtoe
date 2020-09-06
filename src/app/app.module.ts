@@ -15,6 +15,8 @@ import { GameLobbyComponent } from './game/game-lobby/game-lobby.component';
 import { AddPromptComponent } from './add-prompt/add-prompt.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BackButtonComponent } from './utilities/back-button/back-button.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     PromptComponent,
     JoinGameComponent,
     GameLobbyComponent,
-    AddPromptComponent
+    AddPromptComponent,
+    BackButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +36,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     AngularFirestoreModule,
     FormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

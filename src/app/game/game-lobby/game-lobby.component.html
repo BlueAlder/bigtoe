@@ -1,3 +1,4 @@
+<app-back-button></app-back-button>
 <div>
   <!--  Header row with lobby code-->
   <div class="row justify-content-center">
@@ -5,8 +6,8 @@
   </div>
 
   <!--  Add player input-->
-  <div class="row justify-content-center">
-    <div class="col-sm-8 col-md-4">
+  <div class="row justify-content-around">
+    <div class="col-sm-5 col-md-4">
 
 
       <div class="row justify-content-center">
@@ -28,15 +29,32 @@
         </form>
       </div>
     </div>
+
+    <div class="col-sm-5">
+
+      <div class="row justify-content-center">
+        <div class="row">
+          Game Length
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <fa-icon (click)="decreaseGameRounds()" [icon]="faMinus" class="align-self-center game-length-icon"></fa-icon>
+        <h3>{{ gameRounds }}</h3>
+        <fa-icon (click)="increaseGameRounds()" [icon]="faPlus" class="align-self-center game-length-icon">-</fa-icon>
+
+      </div>
+    </div>
   </div>
+  <!--  </div>-->
 
   <div class="row">
     <!--   <div class="col"></div>-->
     <h2>Who's playin' </h2>
   </div>
-    <!--  {{game$ | async | json}}-->
-  <div class="row justify-content-center player-board">
-    <ul class="col-8">
+  <!--  {{game$ | async | json}}-->
+  <div class="row justify-content-start player-board">
+    <ul class="col-6">
       <li *ngFor="let player of players">
         {{player}}
       </li>
@@ -45,8 +63,8 @@
   </div>
 
 
-  <div class="row justify-content-center">
-    <div class="play-button col-lg-4 col-sm-8">
+  <div class="row justify-content-end">
+    <div class="play-button col-lg-4 col-sm-6" style="margin-top: 30px;">
       <a (click)="startGame()">Start game</a>
     </div>
   </div>

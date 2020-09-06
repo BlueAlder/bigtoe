@@ -1,0 +1,11 @@
+.back-button {
+  width: 5vw;
+  height: 5vw;
+  /*outline: black 1px solid;*/
+  text-align: center;
+  margin-top: 5px;
+  position: absolute;
+  font-size: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}

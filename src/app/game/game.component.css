@@ -7,3 +7,8 @@
 
   /*background-color: red;*/
 }
+
+.wrapper {
+  background-attachment: fixed;
+  /*height: 100%*/
+}

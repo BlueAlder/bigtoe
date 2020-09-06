@@ -1,7 +1,9 @@
 export const environment = {
   production: true,
   game_settings: {
-    num_rounds: 5
+    default_num_rounds: 30,
+    max_num_rounds: 60,
+    min_num_rounds: 10
   },
   firebase: {
     apiKey: "AIzaSyCPztcmS_wYHJRdFpYGBi0Z0qHQxClMmwg",

@@ -69,9 +69,9 @@ export class GameService {
     });
   }
 
-  async startGame(players: string[]) {
+  async startGame(players: string[], totalRounds: number) {
     // Pull 20 prompts regex replace the names
-    let prompts = await this.promptsService.getRandomPrompts(environment.game_settings.num_rounds);
+    let prompts = await this.promptsService.getRandomPrompts(totalRounds);
     console.log(prompts);
 
     prompts = prompts.map(prompt => GameService.replacePlaceholderPrompt(prompt, Array.from(players)));
@@ -83,7 +83,7 @@ export class GameService {
     // rand_prompt.forEach(doc => console.log(doc.data()));
 
 
-    this.gameDocument.update({status: Status.STARTED, prompts});
+    this.gameDocument.update({status: Status.STARTED, prompts, total_rounds: totalRounds});
   }
 
   currentGameState() {
@@ -99,7 +99,7 @@ export class GameService {
       prompts: [],
       round: 1,
       status: Status.OPEN,
-      total_rounds: environment.game_settings.num_rounds, // environment.game_settings.num_rounds,
+      total_rounds: environment.game_settings.default_num_rounds, // environment.game_settings.num_rounds,
       type: 'picante'
     };
 
