@@ -9,7 +9,10 @@ import {Router} from "@angular/router";
 export class AppComponent implements OnInit {
   title = 'big-toe';
   elem;
-  isLandscape = false;
+  isFullScreen = false;
+
+
+
 
   constructor(private router: Router) {
   }
@@ -17,7 +20,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.elem = document.body;
-    this.checkOrientation()
+    document.onfullscreenchange  = (event) => {
+      console.log(event);
+    }
+    // this.checkOrientation()
     // document.body.requestFullscreen();
     // alert(screen.orientation.type);
     // this.openFullscreen();
@@ -39,15 +45,8 @@ export class AppComponent implements OnInit {
       /* IE/Edge */
       this.elem.msRequestFullscreen();
     }
-    screen.orientation.lock('landscape')
   }
 
-  checkOrientation() {
-    this.isLandscape = screen.orientation.type === 'landscape-primary' || this.router.url === '/add';
-  }
 
-  @HostListener('window:orientationchange', ['$event'])
-  onOrientationChange(event) {
-   this.checkOrientation();
-  }
+
 }

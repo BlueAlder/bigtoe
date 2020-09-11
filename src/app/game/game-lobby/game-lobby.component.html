@@ -1,4 +1,6 @@
 <app-back-button></app-back-button>
+<!--<ng-cast></ng-cast>-->
+<app-chromecast></app-chromecast>
 <div>
   <!--  Header row with lobby code-->
   <div class="row justify-content-center">
@@ -40,7 +42,7 @@
 
       <div class="row justify-content-center">
         <fa-icon (click)="decreaseGameRounds()" [icon]="faMinus" class="align-self-center game-length-icon"></fa-icon>
-        <h3>{{ gameRounds }}</h3>
+        <h3>{{ (this.gameService.game$ |async)?.total_rounds}}</h3>
         <fa-icon (click)="increaseGameRounds()" [icon]="faPlus" class="align-self-center game-length-icon">-</fa-icon>
 
       </div>
@@ -48,13 +50,13 @@
   </div>
   <!--  </div>-->
 
-  <div class="row">
+  <div class="row justify-content-center">
     <!--   <div class="col"></div>-->
     <h2>Who's playin' </h2>
   </div>
   <!--  {{game$ | async | json}}-->
-  <div class="row justify-content-start player-board">
-    <ul class="col-6">
+  <div class="row justify-content-center player-board">
+    <ul class="col-12">
       <li *ngFor="let player of players">
         {{player}}
       </li>

@@ -24,7 +24,8 @@ div {
 
 .play-button {
   text-align: center;
-  margin-top: 20vh;
+  margin: 10px 0;
+  /*margin-top: 20vh;*/
 }
 
 .play-button{

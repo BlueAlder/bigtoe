@@ -77,6 +77,8 @@ export class GameService {
     prompts = prompts.map(prompt => GameService.replacePlaceholderPrompt(prompt, Array.from(players)));
     console.log(prompts);
 
+    // Call Cloud function to generate images
+
     // await Promise.all(promptPromises);
     // prompts.forEach(prompt => console.log(prompt.));
     // const rand_prompt =  ;
@@ -142,5 +144,14 @@ export class GameService {
       const increment = firebase.firestore.FieldValue.increment(-1) as any;
       this.gameDocument.update({round: increment});
     }
+  }
+
+  changeTotalRounds(incrementValue: number) {
+    const increment = firebase.firestore.FieldValue.increment(incrementValue) as any;
+    this.gameDocument.update({total_rounds: increment});
+  }
+
+  private generateChromecastImages(prompts, gameId) {
+    this.htt
   }
 }

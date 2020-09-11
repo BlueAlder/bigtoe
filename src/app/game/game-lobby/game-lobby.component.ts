@@ -5,6 +5,8 @@ import {GameService} from '../../services/game.service';
 import {ToastrService} from 'ngx-toastr';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { environment } from 'src/environments/environment';
+import {AngularFireStorage} from '@angular/fire/storage';
+import {ChromecastService} from '../../services/chromecast.service';
 
 @Component({
   selector: 'app-game-lobby',
@@ -28,10 +30,14 @@ export class GameLobbyComponent implements OnInit {
 
 
   constructor(public gameService: GameService,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService,
+              private ngCastService: ChromecastService,
+              private storage: AngularFireStorage) { }
 
   ngOnInit(): void {
+
   }
+
 
 
 
@@ -52,8 +58,9 @@ export class GameLobbyComponent implements OnInit {
   }
 
   increaseGameRounds() {
+    // this.castSplashScreen()
     if (this.gameRounds + this.roundIncrementer <= environment.game_settings.max_num_rounds) {
-      this.gameRounds += this.roundIncrementer;
+      this.gameService.changeTotalRounds(10);
     } else {
       this.toastr.error(`Max number of rounds is ${environment.game_settings.max_num_rounds}`, 'Error', {positionClass: 'toast-top-center'})
     }
@@ -61,7 +68,7 @@ export class GameLobbyComponent implements OnInit {
 
   decreaseGameRounds() {
     if (this.gameRounds - this.roundIncrementer >= environment.game_settings.min_num_rounds) {
-      this.gameRounds -= this.roundIncrementer;
+      this.gameService.changeTotalRounds(-10);
     } else {
       this.toastr.error(`Min number of rounds is ${environment.game_settings.min_num_rounds}`, 'Error', {positionClass: 'toast-top-center'})
     }

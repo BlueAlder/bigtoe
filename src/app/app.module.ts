@@ -17,6 +17,9 @@ import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BackButtonComponent } from './utilities/back-button/back-button.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FullscreenComponent } from './utilities/fullscreen/fullscreen.component';
+import {AngularFireStorageModule} from '@angular/fire/storage';
+import { ChromecastComponent } from './chromecast/chromecast.component';
 
 @NgModule({
   declarations: [
@@ -27,13 +30,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     JoinGameComponent,
     GameLobbyComponent,
     AddPromptComponent,
-    BackButtonComponent
+    BackButtonComponent,
+    FullscreenComponent,
+    ChromecastComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
+    AngularFireStorageModule,
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
