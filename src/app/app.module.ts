@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import { HomeComponent } from './home/home.component';
 import { GameComponent } from './game/game.component';
 import { PromptComponent } from './game/prompt/prompt.component';
@@ -17,9 +17,10 @@ import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BackButtonComponent } from './utilities/back-button/back-button.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { FullscreenComponent } from './utilities/fullscreen/fullscreen.component';
-import {AngularFireStorageModule} from '@angular/fire/storage';
+import {FullscreenComponent, ToggleFullscreenDirective} from './utilities/fullscreen/fullscreen.component';
+import {AngularFireStorageModule, BUCKET} from '@angular/fire/storage';
 import { ChromecastComponent } from './chromecast/chromecast.component';
+import {AngularFireFunctionsModule, ORIGIN, REGION} from '@angular/fire/functions';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ChromecastComponent } from './chromecast/chromecast.component';
     AddPromptComponent,
     BackButtonComponent,
     FullscreenComponent,
-    ChromecastComponent
+    ChromecastComponent,
+    ToggleFullscreenDirective
   ],
   imports: [
     BrowserModule,
@@ -40,12 +42,15 @@ import { ChromecastComponent } from './chromecast/chromecast.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
+    AngularFireFunctionsModule,
     FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [
+    {provide: REGION, useValue: 'australia-southeast1'}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

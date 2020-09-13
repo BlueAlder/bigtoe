@@ -50,11 +50,7 @@ export class ChromecastComponent implements OnInit {
   }
 
   async castSplashScreen() {
-    this.storage.ref('sam.png').getDownloadURL()
-      .subscribe(url => {
-        console.log(url);
-        this.ngCastService.launchMedia(url);
-      });
+    this.ngCastService.launchMedia('https://storage.googleapis.com/big-toe-game.appspot.com/sam.png');
 
   }
 

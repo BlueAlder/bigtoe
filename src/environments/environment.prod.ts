@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   game_settings: {
     default_num_rounds: 30,
-    max_num_rounds: 60,
+    max_num_rounds: 100,
     min_num_rounds: 10
   },
   firebase: {

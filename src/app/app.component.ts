@@ -1,5 +1,7 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {Component, Directive, HostListener, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import * as screenfull from 'screenfull';
+
 
 @Component({
   selector: 'app-root',
@@ -22,7 +24,7 @@ export class AppComponent implements OnInit {
     this.elem = document.body;
     document.onfullscreenchange  = (event) => {
       console.log(event);
-    }
+    };
     // this.checkOrientation()
     // document.body.requestFullscreen();
     // alert(screen.orientation.type);
@@ -47,6 +49,5 @@ export class AppComponent implements OnInit {
     }
   }
 
-
-
 }
+

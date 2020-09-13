@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Directive, HostListener, OnInit} from '@angular/core';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
+import * as screenfull from 'screenfull';
 
 @Component({
   selector: 'app-fullscreen',
@@ -33,4 +34,20 @@ export class FullscreenComponent implements OnInit {
     }
   }
 
+  get isFullscreen() {
+    // @ts-ignore
+    return screenfull.isFullscreen;
+  }
 }
+
+@Directive({
+  selector: '[appToggleFullscreen]'
+})
+export class ToggleFullscreenDirective {
+  @HostListener('click') onClick() {
+    if (screenfull.isEnabled) {
+      screenfull.toggle();
+    }
+  }
+}
+

@@ -5,14 +5,24 @@ import {Observable} from 'rxjs';
 import * as firebase from 'firebase';
 import {PromptsService} from './prompts.service';
 import {environment} from '../../environments/environment';
+import {AngularFireFunctions} from '@angular/fire/functions';
+import {ChromecastService} from './chromecast.service';
+import {AngularFireStorage} from '@angular/fire/storage';
+import Storage = firebase.storage.Storage;
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-
+  ccBucket: Storage;
   constructor(private afs: AngularFirestore,
-              private promptsService: PromptsService) {
+              private promptsService: PromptsService,
+              private functions: AngularFireFunctions,
+              private chromecastService: ChromecastService,
+              private storage: AngularFireStorage) {
+    // functions.useFunctionsEmulator('http://localhost:5001')
+    this.ccBucket = this.storage.storage.app.storage('big-toe-game-cc-pic');
+
   }
 
   gameCollection: AngularFirestoreCollection<Game>;
@@ -75,9 +85,9 @@ export class GameService {
     console.log(prompts);
 
     prompts = prompts.map(prompt => GameService.replacePlaceholderPrompt(prompt, Array.from(players)));
-    console.log(prompts);
 
     // Call Cloud function to generate images
+    if (this.chromecastService.status) {  this.generateChromecastImages(prompts, this.gameDocument.ref.id); }
 
     // await Promise.all(promptPromises);
     // prompts.forEach(prompt => console.log(prompt.));
@@ -131,9 +141,14 @@ export class GameService {
     // end game
     if (gameState.round >= gameState.total_rounds) {
       this.gameDocument.update({status: Status.ENDED});
+
+      if (this.chromecastService.status) { this.chromecastService.launchMedia('https://storage.googleapis.com/big-toe-game.appspot.com/gameover.png')}
     } else {
       const increment = firebase.firestore.FieldValue.increment(1) as any;
       this.gameDocument.update({round: increment});
+
+      this.updateChromecastImage(this.gameDocument.ref.id, gameState.round );
+
     }
   }
 
@@ -143,6 +158,7 @@ export class GameService {
     if (gameState.round > 1) {
       const increment = firebase.firestore.FieldValue.increment(-1) as any;
       this.gameDocument.update({round: increment});
+      this.updateChromecastImage(this.gameDocument.ref.id, gameState.round - 2);
     }
   }
 
@@ -152,6 +168,27 @@ export class GameService {
   }
 
   private generateChromecastImages(prompts, gameId) {
-    this.htt
+    const createImage = this.functions.httpsCallable('createImage');
+    createImage({
+      prompts, gameId
+    })
+      .subscribe(res => {
+        this.updateChromecastImage(gameId, 0);
+      });
   }
+
+  updateChromecastImage(gameId, round) {
+
+    if (this.chromecastService.status) {
+      this.ccBucket.ref(`${gameId}/${gameId}-${round}.jpg`).getDownloadURL()
+        .then(url => {
+          console.log(url);
+          this.chromecastService.launchMedia(url);
+        });
+    }
+
+  }
+
+
+
 }

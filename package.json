@@ -29,6 +29,7 @@
     "firebase": "^7.15.4",
     "ngx-toastr": "^12.1.0",
     "rxjs": "^6.5.5",
+    "screenfull": "^5.0.2",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
